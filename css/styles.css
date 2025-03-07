@@ -1,34 +1,274 @@
-body {
-    font-family: Arial, sans-serif;
+/* RESET & BASIC STYLES */
+* {
     margin: 0;
     padding: 0;
-    background-color: #f9f9f9;
+    box-sizing: border-box;
   }
+  
+  body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    background-color: #fff;
+    line-height: 1.6;
+  }
+  
+  /* ======== NAVBAR ======== */
   header {
-    background-color: #333;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 999;
+  }
+  
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: rgba(0, 0, 0, 0.7);
+    transition: background 0.3s ease;
+  }
+  
+  /* When scrolling, the navbar becomes fully opaque */
+  .navbar.scrolled {
+    background: rgba(0, 0, 0, 1);
+  }
+  
+  /* Updated .logo to include image + text side by side */
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.5rem;
+    font-weight: bold;
     color: #fff;
-    padding: 1rem;
-    text-align: center;
   }
-  nav ul {
+  
+  /* Control the size/appearance of the nav logo image */
+  .nav-logo {
+    width: 40px;
+    height: 40px;
+    object-fit: cover; /* or 'contain' if you prefer */
+    border-radius: 4px; /* remove or change if you want a different shape */
+  }
+  
+  .nav-links {
     list-style: none;
-    padding: 0;
+    display: flex;
+    gap: 1rem;
   }
-  nav ul li {
-    display: inline;
-    margin: 0 1rem;
-  }
-  nav ul li a {
+  
+  .nav-links li a {
     color: #fff;
     text-decoration: none;
+    transition: color 0.3s;
   }
-  main {
-    padding: 2rem;
+  
+  .nav-links li a:hover {
+    color: #00bcd4;
   }
-  footer {
+  
+  /* Offset top sections due to the fixed navbar */
+  section {
+    padding: 4rem 2rem;
+    margin-top: 4rem;
+  }
+  
+  /* ======== HERO SECTION ======== */
+  .hero {
+    position: relative;
+    height: 90vh;
+    background: url("../images/EngageU NEW Logo.jpg") center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.2);
+  }
+  
+  .hero-content {
+    position: relative;
     text-align: center;
-    padding: 1rem;
-    background-color: #333;
     color: #fff;
+    max-width: 600px;
+    z-index: 1;
+    animation: fadeInDown 1.2s ease forwards;
+    opacity: 0; /* Will become visible when the .show class is added by JS */
+  }
+  
+  .hero-content h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+  
+  .hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .btn-cta {
+    background: #00bcd4;
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 25px;
+    text-decoration: none;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .btn-cta:hover {
+    background: #0191a7;
+  }
+  
+  /* ======== ABOUT SECTION ======== */
+  .about {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .about h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  /* ======== EVENTS SECTION ======== */
+  .events {
+    text-align: center;
+  }
+  
+  .events-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+  
+  .event-card {
+    background: #f0f0f0;
+    border-radius: 8px;
+    padding: 1.5rem;
+    transition: transform 0.3s ease;
+  }
+  
+  .event-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  /* ======== GALLERY SECTION ======== */
+  .gallery {
+    text-align: center;
+  }
+  
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  
+  .gallery-grid img {
+    width: 100%;
+    border-radius: 8px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  
+  .gallery-grid img:hover {
+    transform: scale(1.05);
+  }
+  
+  /* ======== CONTACT SECTION ======== */
+  .contact {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .contact form {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+  }
+  
+  .form-group label {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+  
+  .form-group input,
+  .form-group textarea {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  /* ======== FOOTER & WAVE ======== */
+  footer {
+    position: relative;
+    background: #333;
+    color: #fff;
+    text-align: center;
+    padding: 3rem 2rem 2rem;
+    margin-top: 2rem;
+  }
+  
+  .wave {
+    position: absolute;
+    top: -80px;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    background: url("data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMTQwMCA4MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTQwMCAwSDB2MzQuMmMzMjUgMzcuNCA2NTAgMzcuNCA5NzUgMEwxNDAwIDB6IiBmaWxsPSIjZmZmIi8+PC9zdmc+") repeat-x;
+    background-size: cover;
+    z-index: 1;
+  }
+  
+  /* ======== SCROLL REVEAL ANIMATION ======== */
+  .hidden {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  
+  .show {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+  }
+  
+  /* ======== KEYFRAMES ======== */
+  @keyframes fadeInDown {
+    0% {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .gallery-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 250px; /* Adjust height as needed */
+    background: #f0f0f0;
+    border: 2px dashed #ccc;
+    font-size: 1.5rem;
+    color: #999;
+    margin-top: 2rem;
   }
   
