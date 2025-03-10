@@ -11,13 +11,11 @@
   <!-- ======== NAVBAR ======== -->
   <header id="header">
     <nav class="navbar">
-      <!-- Updated: Logo image + text in one container -->
-      <div class="logo">
-        EngageU
-      </div>
+      <div class="logo">EngageU</div>
       <ul class="nav-links">
         <li><a href="#home">Home</a></li>
         <li><a href="#about">About</a></li>
+        <li><a href="#what-we-do">What We Do</a></li>
         <li><a href="#events">Events</a></li>
         <li><a href="#gallery">Gallery</a></li>
         <li><a href="#contact">Contact</a></li>
@@ -39,10 +37,56 @@
   <section class="about hidden" id="about">
     <h2>About EngageU</h2>
     <p>
-      EngageU is dedicated to connecting students with vibrant campus clubs and Greek life. 
+      EngageU is dedicated to connecting students with vibrant campus clubs and Greek life.
       We aim to foster community, leadership, and unforgettable experiences through 
       engaging events and innovative marketing strategies.
     </p>
+  </section>
+
+  <!-- ======== WHAT WE DO SECTION ======== -->
+  <section class="what-we-do hidden" id="what-we-do">
+    <h2>What We Do</h2>
+    <p class="intro-text">
+      EngageU offers a digital platform that automates and streamlines club marketing 
+      for student organizations, fraternities, and sororities. By digitizing the 
+      recruitment process, we help clubs grow their communities more effectively 
+      without relying on outdated tabling methods.
+    </p>
+    <div class="what-we-do-cards">
+      <!-- Card 1 -->
+      <div class="wwd-card">
+        <img src="images/platformLogo1.png" alt="Logo 1" class="wwd-icon" />
+        <h3>Centralized Platform</h3>
+        <p>
+          Students can explore clubs, upcoming events, and sign up seamlessly, all in one place.
+        </p>
+      </div>
+      <!-- Card 2 -->
+      <div class="wwd-card">
+        <img src="images/graphLogo2.png" alt="Logo 2" class="wwd-icon" />
+        <h3>Automated Marketing</h3>
+        <p>
+          We help organizations expand their reach with digital tools—no more outdated tabling.
+        </p>
+      </div>
+      <!-- Card 3 -->
+      <div class="wwd-card">
+        <img src="images/emailLogo3.png" alt="Logo 3" class="wwd-icon" />
+        <h3>Sustained Engagement</h3>
+        <p>
+          Email RSVPs & database integration ensure effective follow-ups and ongoing involvement.
+        </p>
+      </div>
+      <!-- Card 4 
+      <div class="wwd-card">
+        <img src="images/logo4.png" alt="Logo 4" class="wwd-icon" />
+        <h3>Growth & Community</h3>
+        <p>
+          Clubs can grow their communities more effectively, fostering a more connected campus.
+        </p>
+      </div> 
+      -->
+    </div>
   </section>
 
   <!-- ======== EVENTS SECTION ======== -->
@@ -65,13 +109,12 @@
   </section>
 
   <!-- ======== GALLERY SECTION ======== -->
-<section class="gallery hidden" id="gallery">
+  <section class="gallery hidden" id="gallery">
     <h2>Gallery</h2>
     <div class="gallery-placeholder">
       <p>Coming Soon!</p>
     </div>
   </section>
-  
 
   <!-- ======== CONTACT SECTION ======== -->
   <section class="contact hidden" id="contact">
@@ -98,9 +141,32 @@
   <footer>
     <div class="wave" aria-hidden="true"></div>
     <p>&copy; 2025 EngageU. All rights reserved.</p>
+    <!-- Social Icons -->
+    <div class="social-icons">
+      <a 
+        href="https://www.instagram.com/joinengageu/" 
+        target="_blank" 
+        class="social-icon"
+      >
+        <img src="images/Instagram.png" alt="Instagram" />
+      </a>
+      <a 
+        href="https://github.com/blazeagain47" 
+        target="_blank" 
+        class="social-icon"
+      >
+        <img src="images/Github.png" alt="GitHub" />
+      </a>
+      <a 
+        href="https://www.linkedin.com/in/sathya-srinivasan-508240236/" 
+        target="_blank" 
+        class="social-icon"
+      >
+        <img src="images/LinkedIn.png" alt="LinkedIn" />
+      </a>
+    </div>
   </footer>
 
-  <!-- No change in JS file, so we keep the same reference -->
   <script src="js/main.js"></script>
 </body>
 </html>
