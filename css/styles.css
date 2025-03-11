@@ -328,3 +328,44 @@ footer p {
     transform: translateY(0);
   }
 }
+
+/* ======== MOBILE NAV ONLY (no desktop changes) ======== */
+
+/* Hide the hamburger icon on larger screens */
+.menu-icon {
+  display: none; 
+  font-size: 1.8rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+@media (max-width: 768px) {
+  /* Show the hamburger icon on mobile */
+  .menu-icon {
+    display: block;
+    margin-right: 1rem;
+  }
+
+  /* Hide nav links by default on mobile */
+  #navLinks {
+    display: none;
+  }
+
+  /* Display nav links vertically when active */
+  #navLinks.active {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 60px; /* adjust based on your navbar height */
+    right: 0;
+    background: rgba(0, 0, 0, 0.9);
+    padding: 1rem;
+    border: 1px solid #444;
+    border-radius: 4px;
+  }
+
+  /* Space out the mobile nav links */
+  #navLinks.active li {
+    margin: 0.5rem 0;
+  }
+}

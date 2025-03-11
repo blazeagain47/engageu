@@ -78,3 +78,19 @@ function smoothScrollTo(target, duration) {
 
   requestAnimationFrame(animation);
 }
+
+// ===== MOBILE NAV TOGGLE =====
+const menuIcon = document.getElementById('menuIcon');
+const navLinks = document.getElementById('navLinks');
+
+menuIcon.addEventListener('click', () => {
+  // Toggle the 'active' class to show/hide nav links
+  navLinks.classList.toggle('active');
+});
+
+// Optional: Close the mobile menu when a link is clicked
+navLinks.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    navLinks.classList.remove('active');
+  });
+});
