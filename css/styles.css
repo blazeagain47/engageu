@@ -139,7 +139,7 @@ section {
 
 .what-we-do h2 {
   font-size: 2rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1rem; /* space between heading and text */
 }
 
 .what-we-do .intro-text {
@@ -185,44 +185,47 @@ section {
   font-size: 0.95rem;
 }
 
-/* ======== EVENTS SECTION ======== */
-.events {
-  text-align: center;
-}
-
-.events-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-  margin-top: 2rem;
-}
-
-.event-card {
-  background: #111;
-  border-radius: 8px;
-  padding: 1.5rem;
-  transition: transform 0.3s ease;
-}
-
-.event-card:hover {
-  transform: translateY(-5px);
-}
-
-/* ======== GALLERY SECTION ======== */
+/* ======== HOW WE DO IT SECTION (formerly .gallery) ======== */
 .gallery {
   text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+  /* No extra margin-top so it matches other sections' default spacing */
 }
 
-.gallery-placeholder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.gallery h2 {
+  font-size: 2rem;        /* Match "What We Do" or "About" size */
+  margin-bottom: 1rem;    /* Same spacing below heading */
+}
+
+.gallery .intro-text {
+  max-width: 700px;
+  margin: 0.5rem auto 2rem; /* same as .what-we-do .intro-text */
+  line-height: 1.4;
+  color: #ccc;
+  font-size: 1.1rem;
+}
+
+/* The container with black background & solid white border */
+.bouncing-container {
+  position: relative;
+  width: 100%;
   height: 250px;
-  background: #111;
-  border: 2px dashed #555;
-  font-size: 1.5rem;
-  color: #999;
-  margin-top: 2rem;
+  background: #000;
+  border: 2px solid #fff;
+  margin-top: 1rem; /* same spacing as .what-we-do-cards { margin-top: 1rem; } */
+  overflow: hidden;
+}
+
+/* The Meta logo: start centered at rest */
+.bouncing-logo {
+  position: absolute;
+  width: 160px;
+  height: auto;
+  /* Center it initially */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 /* ======== CONTACT SECTION ======== */
@@ -328,10 +331,10 @@ footer p {
   left: -7px;
   width: 54px;
   height: 54px;
-  border: 4px solid #000;      /* Thick black ring */
+  border: 4px solid #000;
   border-radius: 50%;
   box-sizing: border-box;
-  transform-origin: 50% 50%;   /* Center of ring */
+  transform-origin: 50% 50%;
   animation: ringRotate 3s linear infinite;
 }
 
@@ -344,12 +347,8 @@ footer p {
   width: 54px;
   height: 54px;
   border-radius: 50%;
-  transform-origin: 50% 50%;  
+  transform-origin: 50% 50%;
   animation: ringRotate 3s linear infinite;
-  /* 
-     We use a radial-gradient to place a small white circle 
-     at the top edge (50% 0%) inside this 54x54 box 
-  */
   background: radial-gradient(circle 4px at 50% 0%, #fff 100%, transparent 100%);
 }
 
