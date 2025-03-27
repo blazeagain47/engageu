@@ -19,16 +19,11 @@
   <header id="header">
     <nav class="navbar">
       <div class="logo">EngageU</div>
-      
-      <!-- Hamburger icon for mobile (hidden on desktop) -->
       <div class="menu-icon" id="menuIcon">&#9776;</div>
-      
       <ul class="nav-links" id="navLinks">
         <li><a href="#home">Home</a></li>
         <li><a href="#about">About</a></li>
         <li><a href="#what-we-do">What We Do</a></li>
-        <!-- Removed the "Events" link -->
-        <!-- Renamed from "Gallery" to "How We Do It" -->
         <li><a href="#how-we-do-it">How We Do It</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
@@ -68,51 +63,52 @@
       <div class="wwd-card">
         <img src="images/platformLogo1.png" alt="Idea Toolkit" class="wwd-icon" />
         <h3>Starter Idea Vault</h3>
-        <p>
-          50+ brand + business ideas tailored for students and creators. 
-          Start fast with ideas that match your skills, style, and story.
-        </p>
+        <p>50+ brand + business ideas tailored for students and creators. Start fast with ideas that match your skills, style, and story.</p>
       </div>
       
-      <!-- Card 2 (Main: Notion Tracker) -->
-      <div class="wwd-card">
+      <!-- Card 2 -->
+      <div class="wwd-card hover-card">
         <img src="images/graphLogo2.png" alt="Notion Tracker" class="wwd-icon" />
         <h3>Notion Content Tracker</h3>
-        <p>
-          Plan, write, and post daily with our free Notion dashboard. 
-          Includes a content calendar, TikTok scripts, and a repurposing tracker.
-        </p>
-        <a href="https://sassy-gray-311.notion.site/EngageU-Content-Tracker-Notion-Template-1bfa3d735dd280968408e775d844dd47" target="_blank" class="btn-cta" style="margin-top: 1rem; display: inline-block;">
-          Try It Free
-        </a>
+        <p>Plan, write, and post daily with our free Notion dashboard. Includes a content calendar, TikTok scripts, and a repurposing tracker.</p>
+        <a href="https://sassy-gray-311.notion.site/EngageU-Content-Tracker-Notion-Template-1bfa3d735dd280968408e775d844dd47" target="_blank" class="btn-cta">Preview</a>
+        <div class="preview-overlay">
+          <img src="images/NotionContentSystem.png" alt="Notion Content System Preview" />
+        </div>
       </div>
 
       <!-- Card 3 -->
       <div class="wwd-card">
         <img src="images/emailLogo3.png" alt="Launch Templates" class="wwd-icon" />
         <h3>Launch Templates</h3>
-        <p>
-          Swipeable Canva kits, Gumroad page starters, and growth tools to help you launch your brand 
-          faster, cleaner, and smarter.
-        </p>
+        <p>Swipeable Canva kits, Gumroad page starters, and growth tools to help you launch your brand faster, cleaner, and smarter.</p>
       </div>
     </div>
   </section>
 
-  <!-- ======== REMOVED EVENTS SECTION ======== -->
-  <!-- The entire "Upcoming Events" block is now gone -->
+  <!-- ======== NOTION CONTENT PRODUCT SECTION ======== -->
+  <section class="product-section hidden" id="notion-product">
+    <div class="product-wrapper">
+      <img src="images/NotionContentSystem.png" alt="Notion Content System preview" class="product-image" />
+      <div class="product-info">
+        <h2>The Notion Content System</h2>
+        <p class="product-sub">Plan smarter. Post faster. Grow your brand using AI — all inside one Notion dashboard.</p>
+        <div class="product-ctas">
+          <a href="https://sassy-gray-311.notion.site/EngageU-Content-Tracker-Notion-Template-1bfa3d735dd280968408e775d844dd47" target="_blank" class="btn-cta">Preview</a>
+          <a href="https://sathyspark.gumroad.com/l/beskz" target="_blank" class="btn-secondary">Buy Full Version →</a>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <!-- ======== HOW WE DO IT SECTION (renamed from Gallery) ======== -->
+  <!-- ======== HOW WE DO IT SECTION ======== -->
   <section class="gallery hidden" id="how-we-do-it">
     <h2>How we do it</h2>
-    <!-- New paragraph styled like other intro text -->
     <p class="intro-text">
       At EngageU, we harness the power of Facebook ads alongside our ready-to-use marketing templates to elevate your brand.
       Our no-code tools and proven strategies give you the digital edge to connect, convert, and grow.
     </p>
-
     <div class="bouncing-container">
-      <!-- Using the new Meta Brand Resource PNG -->
       <img src="images/Meta Brand Resource.png" alt="Meta Logo" class="bouncing-logo" />
     </div>
   </section>
@@ -142,29 +138,10 @@
   <footer>
     <div class="wave" aria-hidden="true"></div>
     <p>&copy; 2025 EngageU. All rights reserved.</p>
-    <!-- Social Icons -->
     <div class="social-icons">
-      <a 
-        href="https://www.instagram.com/join.engageu/" 
-        target="_blank" 
-        class="social-icon"
-      >
-        <img src="images/Instagram colored.png" alt="Instagram" />
-      </a>
-      <a 
-        href="https://github.com/blazeagain47" 
-        target="_blank" 
-        class="social-icon"
-      >
-        <img src="images/Github colored.png" alt="GitHub" />
-      </a>
-      <a 
-        href="https://www.linkedin.com/in/sathya-srinivasan-508240236/" 
-        target="_blank" 
-        class="social-icon"
-      >
-        <img src="images/LinkedIn colored.png" alt="LinkedIn" />
-      </a>
+      <a href="https://www.instagram.com/join.engageu/" target="_blank" class="social-icon"><img src="images/Instagram colored.png" alt="Instagram" /></a>
+      <a href="https://github.com/blazeagain47" target="_blank" class="social-icon"><img src="images/Github colored.png" alt="GitHub" /></a>
+      <a href="https://www.linkedin.com/in/sathya-srinivasan-508240236/" target="_blank" class="social-icon"><img src="images/LinkedIn colored.png" alt="LinkedIn" /></a>
     </div>
   </footer>
 

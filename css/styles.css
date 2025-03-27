@@ -1,232 +1,75 @@
 /* RESET & BASIC STYLES */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:"Segoe UI", Tahoma, Geneva, Verdana, sans-serif; background:#000; color:#fff; line-height:1.6; }
 
-body {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  /* Entire site black background, white text */
-  background-color: #000;
-  color: #fff;
-  line-height: 1.6;
-}
+/* NAVBAR */
+header { position:fixed; top:0; width:100%; z-index:999; }
+.navbar { display:flex; justify-content:space-between; align-items:center; padding:1rem 2rem; background:rgba(0,0,0,0.7); transition:background .3s; }
+.navbar.scrolled { background:rgba(0,0,0,1); }
+.logo { font-size:1.5rem; font-weight:bold; color:#fff; }
+.nav-links { display:flex; gap:1rem; list-style:none; }
+.nav-links a { color:#fff; text-decoration:none; transition:color .3s; }
+.nav-links a:hover { color:#00bcd4; }
 
-/* ======== NAVBAR ======== */
-header {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 999;
-}
+/* SECTIONS */
+section { padding:4rem 2rem; margin-top:4rem; }
+.hidden { opacity:0; transform:translateY(20px); transition:opacity .8s, transform .8s; }
+.show { opacity:1!important; transform:translateY(0)!important; }
 
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2rem;
-  background: rgba(0, 0, 0, 0.7);
-  transition: background 0.3s ease;
-}
+/* HERO */
+.hero { position:relative; height:90vh; background:url("../images/EngageU NEW Logo.jpg") center/cover no-repeat; display:flex; align-items:center; justify-content:center; }
+.hero-overlay { position:absolute; inset:0; background:rgba(0,0,0,.2); }
+.hero-content { position:relative; text-align:center; color:#fff; max-width:600px; opacity:0; animation:fadeInDown 1.2s ease forwards; }
+.hero-content h1 { font-size:3rem; margin-bottom:1rem; }
+.hero-content p { font-size:1.2rem; margin-bottom:1.5rem; }
+.btn-cta { background:#00bcd4; color:#fff; padding:.75rem 1.5rem; border:none; border-radius:25px; text-decoration:none; font-size:1rem; cursor:pointer; transition:background .3s; }
+.btn-cta:hover { background:#0191a7; }
 
-/* When scrolling, the navbar becomes fully opaque */
-.navbar.scrolled {
-  background: rgba(0, 0, 0, 1);
-}
+/* ABOUT */
+.about { text-align:center; max-width:800px; margin:0 auto; }
+.about h2 { font-size:2rem; margin-bottom:1rem; }
 
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #fff;
-}
+/* WHAT WE DO */
+.what-we-do { text-align:center; max-width:1000px; margin:0 auto; }
+.what-we-do h2 { font-size:2rem; margin-bottom:1rem; }
+.intro-text { max-width:700px; margin:.5rem auto 2rem; color:#ccc; font-size:1.1rem; }
+.what-we-do-cards { display:grid; gap:1.5rem; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); margin-top:1rem; }
+.wwd-card { background:#111; border-radius:8px; padding:1.5rem; text-align:center; box-shadow:0 4px 8px rgba(255,255,255,.05); transition:transform .3s; position:relative; }
+.wwd-card:hover { transform:translateY(-5px); }
+.wwd-icon { width:50px; margin-bottom:1rem; }
+.wwd-card h3 { margin-bottom:.5rem; }
+.wwd-card p { color:#ccc; font-size:.95rem; }
 
-.nav-links {
-  list-style: none;
-  display: flex;
-  gap: 1rem;
-}
+/* HOVER PREVIEW */
+.hover-card .preview-overlay { position:absolute; bottom:100%; left:50%; transform:translate(-50%,-10px); width:320px; max-width:90vw; background:#111; border:2px solid #00bcd4; border-radius:8px; box-shadow:0 8px 16px rgba(0,0,0,.5); padding:1rem; opacity:0; visibility:hidden; transition:opacity .25s, transform .25s; z-index:20; }
+.hover-card:hover .preview-overlay { opacity:1; visibility:visible; transform:translate(-50%,-20px); }
+.preview-overlay img { width:100%; border-radius:4px; }
 
-.nav-links li a {
-  color: #fff;
-  text-decoration: none;
-  transition: color 0.3s;
-}
+/* PRODUCT SECTION */
+.product-section { padding:4rem 2rem; background:#111; margin-top:2rem; }
+.product-wrapper { display:flex; align-items:center; gap:2rem; max-width:1100px; margin:0 auto; flex-wrap:wrap; }
+.product-image { flex:1 1 480px; width:100%; border-radius:8px; box-shadow:0 8px 20px rgba(0,0,0,.5); }
+.product-info { flex:1 1 360px; }
+.product-info h2 { font-size:2rem; margin-bottom:0.5rem; }
+.product-sub { color:#ccc; margin-bottom:1.5rem; }
+.product-ctas .btn-secondary { margin-left:1rem; background:transparent; border:2px solid #00bcd4; color:#00bcd4; border-radius:25px; padding:.75rem 1.5rem; text-decoration:none; transition:background .3s, color .3s; }
+.product-ctas .btn-secondary:hover { background:#00bcd4; color:#000; }
 
-.nav-links li a:hover {
-  color: #00bcd4;
-}
-
-/* Offset top sections due to the fixed navbar */
-section {
-  padding: 4rem 2rem;
-  margin-top: 4rem;
-}
-
-/* ======== HERO SECTION ======== */
-.hero {
-  position: relative;
-  height: 90vh;
-  background: url("../images/EngageU NEW Logo.jpg") center/cover no-repeat;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.hero-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.2);
-}
-
-.hero-content {
-  position: relative;
-  text-align: center;
-  color: #fff;
-  max-width: 600px;
-  z-index: 1;
-  animation: fadeInDown 1.2s ease forwards;
-  opacity: 0; /* Will become visible when the .show class is added by JS */
-}
-
-.hero-content h1 {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-}
-
-.hero-content p {
-  font-size: 1.2rem;
-  margin-bottom: 1.5rem;
-}
-
-.btn-cta {
-  background: #00bcd4;
-  color: #fff;
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 25px;
-  text-decoration: none;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.btn-cta:hover {
-  background: #0191a7;
-}
-
-/* ======== ABOUT SECTION ======== */
-.about {
-  text-align: center;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.about h2 {
-  font-size: 2rem;
-  margin-bottom: 1rem;
-}
-
-/* ======== WHAT WE DO SECTION ======== */
-.what-we-do {
-  text-align: center;
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-.what-we-do h2 {
-  font-size: 2rem;
-  margin-bottom: 1rem; /* space between heading and text */
-}
-
-.what-we-do .intro-text {
-  max-width: 700px;
-  margin: 0.5rem auto 2rem;
-  line-height: 1.4;
-  color: #ccc;
-  font-size: 1.1rem;
-}
-
-.what-we-do-cards {
-  display: grid;
-  gap: 1.5rem;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  margin-top: 1rem;
-}
-
-.wwd-card {
-  background: #111;
-  border-radius: 8px;
-  padding: 1.5rem;
-  text-align: center;
-  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.05);
-  transition: transform 0.3s ease;
-}
-
-.wwd-card:hover {
-  transform: translateY(-5px);
-}
-
-.wwd-icon {
-  width: 50px;
-  margin-bottom: 1rem;
-}
-
-.wwd-card h3 {
-  margin-bottom: 0.5rem;
-  color: #fff;
-}
-
-.wwd-card p {
-  color: #ccc;
-  font-size: 0.95rem;
-}
-
-/* ======== HOW WE DO IT SECTION (formerly .gallery) ======== */
-.gallery {
-  text-align: center;
-  max-width: 800px;
-  margin: 0 auto;
-  /* No extra margin-top so it matches other sections' default spacing */
-}
-
-.gallery h2 {
-  font-size: 2rem;        /* Match "What We Do" or "About" size */
-  margin-bottom: 1rem;    /* Same spacing below heading */
-}
-
-.gallery .intro-text {
-  max-width: 700px;
-  margin: 0.5rem auto 2rem; /* same as .what-we-do .intro-text */
-  line-height: 1.4;
-  color: #ccc;
-  font-size: 1.1rem;
-}
-
-/* The container with black background & solid white border */
-.bouncing-container {
-  position: relative;
-  width: 100%;
-  height: 250px;
-  background: #000;
-  border: 2px solid #fff;
-  margin-top: 1rem; /* same spacing as .what-we-do-cards { margin-top: 1rem; } */
-  overflow: hidden;
-}
-
-/* The Meta logo: start centered at rest */
+/* HOW WE DO IT */
+.gallery { text-align:center; max-width:800px; margin:0 auto; }
+.bouncing-container { position:relative; width:100%; height:250px; background:#000; border:2px solid #fff; overflow:hidden; margin-top:1rem; }
+.bouncing-logo { position:absolute; width:160px; top:50%; left:50%; transform:translate(-50%,-50%); }
 .bouncing-logo {
-  position: absolute;
-  width: 160px;
-  height: auto;
-  /* Center it initially */
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  will-change: transform;
 }
+
+
+/* ===== Move Preview button lower inside middle card ===== */
+.wwd-card.hover-card .btn-cta {
+  display: inline-block;
+  margin-top: 2.5rem;
+}
+
 
 /* ======== CONTACT SECTION ======== */
 .contact {
