@@ -1,0 +1,343 @@
+<!-- ==========ENGAGEAI.HTML=========-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EngageU.ai - AI Business Creation Service</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/engageai.css" />
+
+  <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="EngageU" />
+  <link rel="manifest" href="/site.webmanifest" />
+</head>
+<body>
+
+  <!-- ======== NAVBAR ======== -->
+  <header id="header">
+    <nav class="navbar">
+      <div class="logo">EngageU.ai</div>
+      
+      <!-- Hamburger icon for mobile (hidden on desktop) -->
+      <div class="menu-icon" id="menuIcon">&#9776;</div>
+      
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html#home">Home</a></li>
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="index.html#what-we-do">What We Do</a></li>
+        <li><a href="index.html#events">Events</a></li>
+        <li><a href="index.html#gallery">Gallery</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+        <li><a href="engageai.html" class="active">EngageU.ai</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ======== HERO SECTION ======== -->
+  <section class="hero" id="home">
+    <div class="hero-overlay"></div>
+    <div class="hero-content hidden">
+      <h1>EngageU.ai</h1>
+      <p>Create your business from scratch with AI</p>
+      <a href="#generator" class="btn-cta">Start Creating</a>
+    </div>
+  </section>
+
+  <!-- ======== ABOUT AI SERVICE SECTION ======== -->
+  <section class="about hidden" id="about-ai">
+    <h2>About EngageU.ai</h2>
+    <p>
+      EngageU.ai is your all-in-one AI business creator. Simply answer a few questions about your 
+      business idea, and our AI will generate a complete starter kit including logo, mission statement, 
+      website template, Instagram post ideas, and more. Launch your business faster and more 
+      efficiently than ever before.
+    </p>
+  </section>
+
+  <!-- ======== GENERATOR SECTION ======== -->
+  <section class="generator hidden" id="generator">
+    <h2>Business Creator</h2>
+    <div class="ai-steps">
+      <div class="step-indicator">
+        <div class="step active" data-step="1">1</div>
+        <div class="step" data-step="2">2</div>
+        <div class="step" data-step="3">3</div>
+        <div class="step" data-step="4">4</div>
+        <div class="step" data-step="5">5</div>
+      </div>
+
+      <div class="step-content">
+        <!-- Step 1: Brand Name -->
+        <div class="step-panel active" id="step1">
+          <h3>Step 1: Brand Name</h3>
+          <div class="form-group">
+            <label for="brandName">Enter your brand name:</label>
+            <div class="input-with-icon">
+              <input id="brandName" type="text" placeholder="Your brand name..." />
+              <button id="generateNameBtn" class="icon-btn" title="Generate random name">
+                <img src="images/dice-icon.png" alt="Generate" class="dice-icon" />
+              </button>
+            </div>
+          </div>
+          <div id="generatedNames" class="name-suggestions"></div>
+          <div class="step-navigation">
+            <button class="btn-cta next-step" data-next="2">Next</button>
+          </div>
+        </div>
+
+        <!-- Step 2: Business Type -->
+        <div class="step-panel" id="step2">
+          <h3>Step 2: Business Type</h3>
+          <div class="form-group">
+            <label for="businessType">What type of business are you creating?</label>
+            <select id="businessType">
+              <option value="">Select a business type...</option>
+              <option value="ecommerce">E-commerce</option>
+              <option value="service">Service Business</option>
+              <option value="saas">Software as a Service</option>
+              <option value="physical">Physical Store</option>
+              <option value="consulting">Consulting</option>
+              <option value="nonprofit">Non-Profit</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group" id="otherTypeGroup" style="display: none;">
+            <label for="otherType">Please specify:</label>
+            <input id="otherType" type="text" placeholder="Describe your business type..." />
+          </div>
+          <div class="step-navigation">
+            <button class="btn-secondary prev-step" data-prev="1">Back</button>
+            <button class="btn-cta next-step" data-next="3">Next</button>
+          </div>
+        </div>
+
+        <!-- Step 3: Mission & Goals -->
+        <div class="step-panel" id="step3">
+          <h3>Step 3: Mission & Goals</h3>
+          <div class="form-group">
+            <label for="missionStatement">What is your business mission or goal?</label>
+            <textarea id="missionStatement" rows="4" placeholder="Describe what your business aims to accomplish..."></textarea>
+          </div>
+          <div class="form-group">
+            <label for="targetAudience">Who is your target audience?</label>
+            <input id="targetAudience" type="text" placeholder="Describe your ideal customers..." />
+          </div>
+          <div class="step-navigation">
+            <button class="btn-secondary prev-step" data-prev="2">Back</button>
+            <button class="btn-cta next-step" data-next="4">Next</button>
+          </div>
+        </div>
+
+        <!-- Step 4: Products/Services -->
+        <div class="step-panel" id="step4">
+          <h3>Step 4: Products & Services</h3>
+          <div class="form-group">
+            <label for="productsServices">What products or services will you offer?</label>
+            <textarea id="productsServices" rows="4" placeholder="List your main products or services..."></textarea>
+          </div>
+          <div class="form-group">
+            <label for="uniqueSelling">What makes your business unique?</label>
+            <textarea id="uniqueSelling" rows="3" placeholder="Your unique selling proposition..."></textarea>
+          </div>
+          <div class="step-navigation">
+            <button class="btn-secondary prev-step" data-prev="3">Back</button>
+            <button class="btn-cta next-step" data-next="5">Next</button>
+          </div>
+        </div>
+
+        <!-- Step 5: Visual Preferences -->
+        <div class="step-panel" id="step5">
+          <h3>Step 5: Visual Preferences</h3>
+          <div class="form-group">
+            <label for="colorScheme">Preferred color scheme:</label>
+            <select id="colorScheme">
+              <option value="blue">Blue tones</option>
+              <option value="green">Green tones</option>
+              <option value="red">Red tones</option>
+              <option value="purple">Purple tones</option>
+              <option value="orange">Orange tones</option>
+              <option value="neutral">Neutral tones</option>
+              <option value="colorful">Colorful & vibrant</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="brandStyle">Brand style:</label>
+            <select id="brandStyle">
+              <option value="modern">Modern & Minimal</option>
+              <option value="classic">Classic & Professional</option>
+              <option value="playful">Playful & Friendly</option>
+              <option value="luxury">Luxury & Elegant</option>
+              <option value="tech">Tech & Innovative</option>
+              <option value="retro">Retro & Vintage</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="additionalInfo">Anything else we should know?</label>
+            <textarea id="additionalInfo" rows="3" placeholder="Any additional details or preferences..."></textarea>
+          </div>
+          <div class="step-navigation">
+            <button class="btn-secondary prev-step" data-prev="4">Back</button>
+            <button id="generateBtn" class="btn-cta">Generate Business Kit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results Section (initially hidden) -->
+    <div id="results" class="results-container" style="display: none;">
+      <h2>Your Business Kit</h2>
+      
+      <div class="loading-spinner" id="loadingSpinner">
+        <div class="spinner"></div>
+        <p>Creating your business kit...</p>
+      </div>
+      
+      <div class="results-content" id="resultsContent" style="display: none;">
+        <!-- Logo Section -->
+        <div class="result-section">
+          <h3>Your Logo</h3>
+          <div class="logo-container" id="logoContainer">
+            <!-- Logo will be inserted here -->
+          </div>
+          <button class="btn-secondary" id="downloadLogoBtn">Download Logo</button>
+        </div>
+        
+        <!-- Mission Statement Section -->
+        <div class="result-section">
+          <h3>Mission Statement</h3>
+          <div class="content-box" id="missionResult"></div>
+          <button class="btn-secondary copy-btn" data-copy="missionResult">Copy</button>
+        </div>
+        
+        <!-- About Us Section -->
+        <div class="result-section">
+          <h3>About Us</h3>
+          <div class="content-box" id="aboutUsResult"></div>
+          <button class="btn-secondary copy-btn" data-copy="aboutUsResult">Copy</button>
+        </div>
+        
+        <!-- Instagram Post Ideas Section -->
+        <div class="result-section">
+          <h3>Instagram Post Ideas</h3>
+          <div class="content-box" id="instagramIdeasResult"></div>
+          <button class="btn-secondary copy-btn" data-copy="instagramIdeasResult">Copy</button>
+        </div>
+        
+        <!-- Website Starter Section -->
+        <div class="result-section">
+          <h3>Website Starter Code</h3>
+          <div class="content-box code-box" id="websiteCodeResult">
+            <pre><code><!-- Code will be inserted here --></code></pre>
+          </div>
+          <button class="btn-secondary copy-btn" data-copy="websiteCodeResult">Copy Code</button>
+          <button class="btn-secondary" id="downloadCodeBtn">Download Files</button>
+        </div>
+        
+        <!-- Get Full Package Section -->
+        <div class="upgrade-section">
+          <h3>Want the complete package?</h3>
+          <p>Get the full business starter kit including:</p>
+          <ul>
+            <li>High-resolution logo files (PNG, SVG, PDF)</li>
+            <li>Complete brand guidelines document</li>
+            <li>Custom Notion content system</li>
+            <li>30-day marketing calendar</li>
+            <li>Social media templates</li>
+            <li>Email newsletter templates</li>
+          </ul>
+          <a href="#pricing" class="btn-cta">Upgrade to Premium</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== PRICING SECTION ======== -->
+  <section class="pricing hidden" id="pricing">
+    <h2>Pricing Plans</h2>
+    <div class="pricing-cards">
+      <div class="pricing-card">
+        <h3>Basic</h3>
+        <div class="price">$29</div>
+        <p class="price-period">one-time</p>
+        <ul class="pricing-features">
+          <li>AI-generated logo</li>
+          <li>Mission statement</li>
+          <li>About Us content</li>
+          <li>5 Instagram post ideas</li>
+          <li>Basic website template</li>
+        </ul>
+        <button class="btn-cta pricing-btn" data-package="basic">Get Started</button>
+      </div>
+      
+      <div class="pricing-card featured">
+        <div class="featured-tag">Most Popular</div>
+        <h3>Premium</h3>
+        <div class="price">$79</div>
+        <p class="price-period">one-time</p>
+        <ul class="pricing-features">
+          <li>Everything in Basic</li>
+          <li>High-resolution logo files</li>
+          <li>Brand guidelines document</li>
+          <li>Custom Notion content system</li>
+          <li>30-day marketing calendar</li>
+          <li>10 additional Instagram ideas</li>
+        </ul>
+        <button class="btn-cta pricing-btn" data-package="premium">Get Started</button>
+      </div>
+      
+      <div class="pricing-card">
+        <h3>Business</h3>
+        <div class="price">$149</div>
+        <p class="price-period">one-time</p>
+        <ul class="pricing-features">
+          <li>Everything in Premium</li>
+          <li>Email newsletter templates</li>
+          <li>Social media templates</li>
+          <li>Business launch checklist</li>
+          <li>60-minute consultation call</li>
+          <li>30 days of email support</li>
+        </ul>
+        <button class="btn-cta pricing-btn" data-package="business">Get Started</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== FOOTER ======== -->
+  <footer>
+    <div class="wave" aria-hidden="true"></div>
+    <p>&copy; 2025 EngageU. All rights reserved.</p>
+    <!-- Social Icons -->
+    <div class="social-icons">
+      <a 
+        href="https://www.instagram.com/join.engageu/" 
+        target="_blank" 
+        class="social-icon"
+      >
+        <img src="images/Instagram colored.png" alt="Instagram" />
+      </a>
+      <a 
+        href="https://github.com/blazeagain47" 
+        target="_blank" 
+        class="social-icon"
+      >
+        <img src="images/Github colored.png" alt="GitHub" />
+      </a>
+      <a 
+        href="https://www.linkedin.com/in/sathya-srinivasan-508240236/" 
+        target="_blank" 
+        class="social-icon"
+      >
+        <img src="images/LinkedIn colored.png" alt="LinkedIn" />
+      </a>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/engageai.js"></script>
+</body>
+</html>

@@ -1,0 +1,257 @@
+// server.js - Express backend for EngageU.ai
+
+const express = require('express');
+const cors = require('cors');
+const dotenv = require('dotenv');
+const { OpenAI } = require('openai');
+const path = require('path');
+const fs = require('fs');
+
+// Load environment variables
+dotenv.config();
+
+// Initialize Express app
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Initialize OpenAI client
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY
+});
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Routes
+app.post('/api/generate-business-kit', async (req, res) => {
+  try {
+    const {
+      brandName,
+      businessType,
+      missionStatement,
+      targetAudience,
+      productsServices,
+      uniqueSelling,
+      colorScheme,
+      brandStyle,
+      additionalInfo
+    } = req.body;
+
+    // Generate mission statement
+    const missionResponse = await openai.chat.completions.create({
+      model: "gpt-4",
+      messages: [
+        {
+          role: "system",
+          content: "You are a business consultant specializing in creating compelling mission statements."
+        },
+        {
+          role: "user",
+          content: `Create a professional mission statement for a ${businessType} business named "${brandName}". 
+          Their goals are: ${missionStatement}. 
+          Target audience: ${targetAudience}. 
+          Products/services: ${productsServices}. 
+          Unique selling proposition: ${uniqueSelling}.
+          Make it concise, inspiring, and authentic.`
+        }
+      ],
+      max_tokens: 300
+    });
+
+    // Generate about us content
+    const aboutUsResponse = await openai.chat.completions.create({
+      model: "gpt-4",
+      messages: [
+        {
+          role: "system",
+          content: "You are a business copywriter specializing in creating compelling About Us pages."
+        },
+        {
+          role: "user",
+          content: `Create engaging About Us content for a ${businessType} business named "${brandName}". 
+          Include their mission: ${missionStatement}. 
+          Target audience: ${targetAudience}. 
+          Products/services: ${productsServices}. 
+          Unique selling proposition: ${uniqueSelling}.
+          Write approximately 3 paragraphs that tell a story about the brand's origin, values, and vision.`
+        }
+      ],
+      max_tokens: 500
+    });
+
+    // Generate Instagram post ideas
+    const instagramResponse = await openai.chat.completions.create({
+      model: "gpt-4",
+      messages: [
+        {
+          role: "system",
+          content: "You are a social media specialist who creates engaging Instagram content ideas."
+        },
+        {
+          role: "user",
+          content: `Create 5 Instagram post ideas for a ${businessType} business named "${brandName}". 
+          Their mission: ${missionStatement}. 
+          Target audience: ${targetAudience}. 
+          Products/services: ${productsServices}.
+          Brand style: ${brandStyle}.
+          
+          For each post idea, provide:
+          1. A catchy caption
+          2. Hashtags (5-7 relevant ones)
+          3. Brief description of the image/video content
+          4. Best time to post
+          
+          Make these posts engaging and likely to convert followers into customers.`
+        }
+      ],
+      max_tokens: 800
+    });
+
+    // Generate basic website HTML template
+    const websiteResponse = await openai.chat.completions.create({
+      model: "gpt-4",
+      messages: [
+        {
+          role: "system",
+          content: "You are a web developer creating starter HTML templates for businesses."
+        },
+        {
+          role: "user",
+          content: `Create a basic HTML/CSS/JS website template for a ${businessType} business named "${brandName}". 
+          Color scheme preference: ${colorScheme}.
+          Brand style: ${brandStyle}.
+          Include a mobile-responsive design with:
+          - Navigation bar
+          - Hero section with their mission statement: "${missionResponse.choices[0].message.content.trim()}"
+          - About Us section using this content: "${aboutUsResponse.choices[0].message.content.trim().substring(0, 200)}..."
+          - Products/Services section based on: ${productsServices}
+          - Contact form
+          - Footer with social media links
+          
+          Provide complete HTML with embedded CSS and JavaScript in a single file that can be used as a starting point.`
+        }
+      ],
+      max_tokens: 1500
+    });
+
+    // Generate SVG logo (simplified)
+    const logoPrompt = `Create a simple SVG logo for a ${businessType} business named "${brandName}". 
+                      Style: ${brandStyle}. Color scheme: ${colorScheme}.`;
+    
+    const logoResponse = await openai.chat.completions.create({
+      model: "gpt-4",
+      messages: [
+        {
+          role: "system",
+          content: "You are a graphic designer specializing in creating SVG logos. Provide only valid SVG code with no explanation."
+        },
+        {
+          role: "user",
+          content: logoPrompt
+        }
+      ],
+      max_tokens: 1000
+    });
+    
+    // Extract SVG code from the response
+    let svgCode = logoResponse.choices[0].message.content.trim();
+    // Remove any backticks or markdown if present
+    svgCode = svgCode.replace(/```svg/g, '').replace(/```/g, '');
+    if (!svgCode.startsWith('<svg')) {
+      // Find the SVG tag if it's buried in explanation text
+      const svgMatch = svgCode.match(/<svg[\s\S]*<\/svg>/);
+      if (svgMatch) {
+        svgCode = svgMatch[0];
+      } else {
+        // Fallback simple SVG if generation failed
+        svgCode = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100">
+          <text x="50%" y="50%" font-family="Arial" font-size="24" text-anchor="middle" dominant-baseline="middle">${brandName}</text>
+        </svg>`;
+      }
+    }
+
+    // Return all generated content
+    res.json({
+      success: true,
+      data: {
+        missionStatement: missionResponse.choices[0].message.content.trim(),
+        aboutUs: aboutUsResponse.choices[0].message.content.trim(),
+        instagramIdeas: instagramResponse.choices[0].message.content.trim(),
+        websiteCode: websiteResponse.choices[0].message.content.trim(),
+        logoSvg: svgCode
+      }
+    });
+
+  } catch (error) {
+    console.error('Error generating business kit:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to generate business kit',
+      error: error.message
+    });
+  }
+});
+
+// Route for generating business name suggestions
+app.post('/api/generate-name-suggestions', async (req, res) => {
+  try {
+    const { businessType, keywords } = req.body;
+
+    const response = await openai.chat.completions.create({
+      model: "gpt-4",
+      messages: [
+        {
+          role: "system",
+          content: "You are a business naming expert. Generate creative, memorable, and available business names."
+        },
+        {
+          role: "user",
+          content: `Generate 5 unique business name suggestions for a ${businessType} business.
+          Keywords/themes to consider: ${keywords || 'modern, professional'}.
+          Each name should be short, memorable, and likely to have domain availability.
+          Return only the names as a JSON array with no additional text.`
+        }
+      ],
+      max_tokens: 250
+    });
+
+    let namesList;
+    try {
+      // Try to parse the response as JSON
+      const content = response.choices[0].message.content.trim();
+      // Remove any markdown formatting if present
+      const jsonStr = content.replace(/```json|```/g, '').trim();
+      namesList = JSON.parse(jsonStr);
+    } catch (parseError) {
+      // If parsing fails, extract names using regex
+      const content = response.choices[0].message.content.trim();
+      const names = content.match(/"([^"]+)"/g) || content.split(/\n|,/).map(n => n.trim()).filter(n => n);
+      namesList = names.map(n => n.replace(/"/g, ''));
+    }
+
+    res.json({
+      success: true,
+      data: namesList
+    });
+
+  } catch (error) {
+    console.error('Error generating name suggestions:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to generate name suggestions',
+      error: error.message
+    });
+  }
+});
+
+// Serve the main application
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
