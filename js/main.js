@@ -44,13 +44,8 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
   });
 });
 
-/**
- * Smoothly scrolls the window to the target element over 'duration' ms.
- * You can tweak the easing function for different effects.
- */
 function smoothScrollTo(target, duration) {
   const startY = window.pageYOffset;
-  // offset to avoid the navbar overlap, if needed
   const offset = 70; // adjust if your navbar is taller/shorter
   const targetY = target.getBoundingClientRect().top + window.pageYOffset - offset;
   const distance = targetY - startY;
@@ -60,7 +55,6 @@ function smoothScrollTo(target, duration) {
     if (startTime === null) startTime = currentTime;
     const elapsed = currentTime - startTime;
     const progress = Math.min(elapsed / duration, 1);
-    // Easing: easeInOutQuad
     const easedProgress = easeInOutQuad(progress);
 
     window.scrollTo(0, startY + distance * easedProgress);
@@ -84,13 +78,92 @@ const menuIcon = document.getElementById('menuIcon');
 const navLinks = document.getElementById('navLinks');
 
 menuIcon.addEventListener('click', () => {
-  // Toggle the 'active' class to show/hide nav links
   navLinks.classList.toggle('active');
 });
 
-// Optional: Close the mobile menu when a link is clicked
 navLinks.querySelectorAll('a').forEach(link => {
   link.addEventListener('click', () => {
     navLinks.classList.remove('active');
   });
 });
+
+// ===== BOUNCING META LOGO IN "HOW WE DO IT" SECTION =====
+const bouncingContainer = document.querySelector('.bouncing-container');
+const bouncingLogo = document.querySelector('.bouncing-logo');
+
+if (bouncingContainer && bouncingLogo) {
+  let bounceStarted = false; // ensure the bounce triggers only once
+
+  // IntersectionObserver: start bounce when container is in view
+  const containerObserver = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !bounceStarted) {
+        bounceStarted = true;
+        obs.unobserve(entry.target);
+        startBounce();
+      }
+    });
+  }, { threshold: 0.1 });
+
+  containerObserver.observe(bouncingContainer);
+
+  function startBounce() {
+    // Remove the default center positioning so we can set random positions
+    bouncingLogo.style.top = '0';
+    bouncingLogo.style.left = '0';
+    bouncingLogo.style.transform = 'none';
+
+    // Grab container & logo dimensions
+    const containerWidth = bouncingContainer.clientWidth;
+    const containerHeight = bouncingContainer.clientHeight;
+    const logoWidth = bouncingLogo.clientWidth;
+    const logoHeight = bouncingLogo.clientHeight;
+
+    // Random starting position within container
+    let xPos = Math.random() * (containerWidth - logoWidth);
+    let yPos = Math.random() * (containerHeight - logoHeight);
+
+    // Random speeds & directions (range ~1–3)
+    let xSpeed = (Math.random() < 0.5 ? -1 : 1) * (Math.random() * 2 + 1);
+    let ySpeed = (Math.random() < 0.5 ? -1 : 1) * (Math.random() * 2 + 1);
+
+    // Immediately jump to random start position
+    bouncingLogo.style.transform = `translate(${xPos}px, ${yPos}px)`;
+
+    function bounceLogo() {
+      // Re-check in case container is resized
+      const cWidth = bouncingContainer.clientWidth;
+      const cHeight = bouncingContainer.clientHeight;
+      const lWidth = bouncingLogo.clientWidth;
+      const lHeight = bouncingLogo.clientHeight;
+
+      xPos += xSpeed;
+      yPos += ySpeed;
+
+      // Bounce off left/right edges
+      if (xPos <= 0) {
+        xPos = 0;
+        xSpeed = -xSpeed;
+      } else if (xPos + lWidth >= cWidth) {
+        xPos = cWidth - lWidth;
+        xSpeed = -xSpeed;
+      }
+
+      // Bounce off top/bottom edges
+      if (yPos <= 0) {
+        yPos = 0;
+        ySpeed = -ySpeed;
+      } else if (yPos + lHeight >= cHeight) {
+        yPos = cHeight - lHeight;
+        ySpeed = -ySpeed;
+      }
+
+      // Apply new position
+      bouncingLogo.style.transform = `translate(${xPos}px, ${yPos}px)`;
+      requestAnimationFrame(bounceLogo);
+    }
+
+    // Begin bouncing loop
+    bounceLogo();
+  }
+}
