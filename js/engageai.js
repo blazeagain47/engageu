@@ -252,23 +252,34 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
-  // Generate placeholder results (to be replaced with actual API calls)
-  function generatePlaceholderResults(businessData) {
-    // 1. Generate logo placeholder
-    generatePlaceholderLogo(businessData);
-    
-    // 2. Generate mission statement
-    document.getElementById('missionResult').textContent = generatePlaceholderMission(businessData);
-    
-    // 3. Generate about us
-    document.getElementById('aboutUsResult').textContent = generatePlaceholderAboutUs(businessData);
-    
-    // 4. Generate Instagram ideas
-    document.getElementById('instagramIdeasResult').textContent = generatePlaceholderInstagramIdeas(businessData);
-    
-    // 5. Generate website code
-    document.getElementById('websiteCodeResult').querySelector('code').textContent = generatePlaceholderWebsiteCode(businessData);
-  }
+// ✅ NEW: Helper function to format mission statement
+function formatMissionStatement(data) {
+  return `🎯 At ${data.name}, we are driven by a clear mission: ${data.mission.charAt(0).toUpperCase() + data.mission.slice(1)}.\n\nOur purpose is to empower ${data.audience} through high-quality ${data.type} solutions, blending innovation, reliability, and care. We envision becoming a trusted leader in the ${data.type} space by offering unparalleled ${data.offerings.toLowerCase()} that make a difference.`;
+}
+
+// ✅ NEW: Helper function to format about us
+function formatAboutUs(data) {
+  return `## 👋 About Us\n\nFounded with a passion for ${data.mission.toLowerCase()}, **${data.name}** is a forward-thinking ${data.type} brand. We are here to serve ${data.audience}, offering modern solutions like ${data.offerings} that truly resonate.\n\n### 💡 What Makes Us Unique\n${data.uniqueSelling}\n\n### 🤝 Why Trust Us\nWe prioritize transparency, customer care, and quality. Our team is obsessed with improving every touchpoint to make your experience exceptional.`;
+}
+
+// ✅ NEW: Helper function to generate Instagram ideas with emojis
+function formatInstagramIdeas(data) {
+  return `📱 **Instagram Content Ideas for ${data.name}**\n\n1. 🛠️ **Behind-the-Scenes**: Show how your ${data.offerings.split(',')[0]} is made or delivered.\n2. 🙌 **Meet the Team**: Highlight the people who power ${data.name}.\n3. 📊 **Tips & Facts**: Share quick insights that ${data.audience} will love.\n4. 🎁 **Product Spotlights**: Weekly highlight of your best-selling item.\n5. ❤️ **Customer Stories**: Real stories = real impact.\n6. 🤔 **Polls/Quizzes**: Get to know your audience while boosting engagement!\n7. 🔥 **Trends in ${data.type}**: Stay relevant by covering what's hot.\n8. 🎉 **Giveaways**: Who doesn’t love free stuff?\n9. 🧠 **Value Drops**: Teach, inspire, and educate in your niche.\n10. 📦 **Launch Announcements**: Got something new? Hype it up!`;
+}
+
+
+function generatePlaceholderResults(businessData) {
+  generatePlaceholderLogo(businessData); // ✅ Keep your logo generation
+
+  // ✅ Replace plain-text filler with better GPT-like generation
+  document.getElementById('missionResult').textContent = formatMissionStatement(businessData);
+  document.getElementById('aboutUsResult').textContent = formatAboutUs(businessData);
+  document.getElementById('instagramIdeasResult').textContent = formatInstagramIdeas(businessData);
+
+  // ✅ Leave the website code generator as-is
+  document.getElementById('websiteCodeResult').querySelector('code').textContent = generatePlaceholderWebsiteCode(businessData);
+}
+
   
   // Generate placeholder logo (to be replaced with DALL-E API)
   function generatePlaceholderLogo(businessData) {
