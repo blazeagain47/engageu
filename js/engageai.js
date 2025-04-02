@@ -254,32 +254,153 @@ document.addEventListener('DOMContentLoaded', function() {
   
 // ✅ NEW: Helper function to format mission statement
 function formatMissionStatement(data) {
-  return `🎯 At ${data.name}, we are driven by a clear mission: ${data.mission.charAt(0).toUpperCase() + data.mission.slice(1)}.\n\nOur purpose is to empower ${data.audience} through high-quality ${data.type} solutions, blending innovation, reliability, and care. We envision becoming a trusted leader in the ${data.type} space by offering unparalleled ${data.offerings.toLowerCase()} that make a difference.`;
+  // The mission statement will now come directly from the AI response
+  // Just ensure proper display with some light formatting
+  const missionText = data.missionStatement || 'Mission statement not available';
+  return missionText.trim().replace(/\n{3,}/g, '\n\n');
 }
 
-// ✅ NEW: Helper function to format about us
+// ✅ NEW: Helper function to format About Us content
 function formatAboutUs(data) {
-  return `## 👋 About Us\n\nFounded with a passion for ${data.mission.toLowerCase()}, **${data.name}** is a forward-thinking ${data.type} brand. We are here to serve ${data.audience}, offering modern solutions like ${data.offerings} that truly resonate.\n\n### 💡 What Makes Us Unique\n${data.uniqueSelling}\n\n### 🤝 Why Trust Us\nWe prioritize transparency, customer care, and quality. Our team is obsessed with improving every touchpoint to make your experience exceptional.`;
+  // The about us content will now come directly from the AI response
+  // Add section headers and format for readability
+  const aboutText = data.aboutUs || 'About Us content not available';
+  return aboutText.trim()
+    .replace(/\n{3,}/g, '\n\n')
+    .replace(/##\s/g, '### ') // Ensure consistent header hierarchy
+    .replace(/\*\*/g, ''); // Remove bold markdown as we'll style with CSS
 }
 
-// ✅ NEW: Helper function to generate Instagram ideas with emojis
+// ✅ NEW: Helper function to format Instagram ideas
 function formatInstagramIdeas(data) {
-  return `📱 **Instagram Content Ideas for ${data.name}**\n\n1. 🛠️ **Behind-the-Scenes**: Show how your ${data.offerings.split(',')[0]} is made or delivered.\n2. 🙌 **Meet the Team**: Highlight the people who power ${data.name}.\n3. 📊 **Tips & Facts**: Share quick insights that ${data.audience} will love.\n4. 🎁 **Product Spotlights**: Weekly highlight of your best-selling item.\n5. ❤️ **Customer Stories**: Real stories = real impact.\n6. 🤔 **Polls/Quizzes**: Get to know your audience while boosting engagement!\n7. 🔥 **Trends in ${data.type}**: Stay relevant by covering what's hot.\n8. 🎉 **Giveaways**: Who doesn’t love free stuff?\n9. 🧠 **Value Drops**: Teach, inspire, and educate in your niche.\n10. 📦 **Launch Announcements**: Got something new? Hype it up!`;
+  // The Instagram ideas will now come directly from the AI response
+  // Just ensure proper display formatting and emoji consistency
+  const ideasText = data.instagramIdeas || 'Instagram content ideas not available';
+  return ideasText.trim()
+    .replace(/\n{3,}/g, '\n\n')
+    .replace(/##\s/g, '### ') // Ensure consistent header hierarchy
+    .replace(/(\d+\.\s)/g, '📱 $1'); // Add emoji to numbered lists
 }
-
 
 function generatePlaceholderResults(businessData) {
-  generatePlaceholderLogo(businessData); // ✅ Keep your logo generation
-
-  // ✅ Replace plain-text filler with better GPT-like generation
-  document.getElementById('missionResult').textContent = formatMissionStatement(businessData);
-  document.getElementById('aboutUsResult').textContent = formatAboutUs(businessData);
-  document.getElementById('instagramIdeasResult').textContent = formatInstagramIdeas(businessData);
-
-  // ✅ Leave the website code generator as-is
-  document.getElementById('websiteCodeResult').querySelector('code').textContent = generatePlaceholderWebsiteCode(businessData);
+  // Generate logo
+  generatePlaceholderLogo(businessData);
+  
+  // Make API call to generate content
+  fetch('/api/generate-business-kit', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(businessData)
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      // Format and display AI-generated content
+      document.getElementById('missionResult').innerHTML = formatMissionStatement({
+        missionStatement: data.data.missionStatement
+      });
+      document.getElementById('aboutUsResult').innerHTML = formatAboutUs({
+        aboutUs: data.data.aboutUs
+      });
+      document.getElementById('instagramIdeasResult').innerHTML = formatInstagramIdeas({
+        instagramIdeas: data.data.instagramIdeas
+      });
+      
+      // Generate website code template
+      document.getElementById('websiteCodeResult').querySelector('code').textContent = generatePlaceholderWebsiteCode(businessData);
+    } else {
+      throw new Error('Failed to generate content');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    // Show fallback content if API call fails
+    document.getElementById('missionResult').innerHTML = generatePlaceholderMission(businessData);
+    document.getElementById('aboutUsResult').innerHTML = generatePlaceholderAboutUs(businessData);
+    document.getElementById('instagramIdeasResult').innerHTML = generatePlaceholderInstagramIdeas(businessData);
+    document.getElementById('websiteCodeResult').querySelector('code').textContent = generatePlaceholderWebsiteCode(businessData);
+  });
 }
 
+// Update CSS styles for better content presentation
+const styleSheet = document.createElement('style');
+styleSheet.textContent = `
+  .content-box {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 15px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    color: #333333;
+  }
+  
+  .content-box h2, .content-box h3 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-size: 1.25rem;
+  }
+  
+  .content-box p {
+    color: #34495e;
+    line-height: 1.6;
+    margin-bottom: 10px;
+  }
+  
+  .content-box ul, .content-box ol {
+    padding-left: 20px;
+    margin: 10px 0;
+    color: #34495e;
+  }
+  
+  .content-box li {
+    margin-bottom: 8px;
+    line-height: 1.5;
+  }
+  
+  .instagram-post {
+    border-left: 4px solid #00b4d8;
+    padding-left: 15px;
+    margin: 15px 0;
+  }
+  
+  .hashtags {
+    color: #00b4d8;
+    font-size: 0.9em;
+    margin-top: 5px;
+  }
+  
+  .post-time {
+    color: #6c757d;
+    font-size: 0.85em;
+    font-style: italic;
+  }
+  
+  #missionResult, #aboutUsResult, #instagramIdeasResult {
+    color: #333333;
+    background: #ffffff;
+    padding: 15px;
+    border-radius: 6px;
+    min-height: 50px;
+  }
+  
+  .copy-btn {
+    margin-top: 10px;
+    padding: 8px 16px;
+    background-color: #00b4d8;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .copy-btn:hover {
+    background-color: #0077b6;
+  }
+`;
+document.head.appendChild(styleSheet);
   
   // Generate placeholder logo (to be replaced with DALL-E API)
   function generatePlaceholderLogo(businessData) {
@@ -712,3 +833,407 @@ function generatePlaceholderResults(businessData) {
       return null;
     }
   }
+
+// Add input validation and confirmation modal functionality
+function validateAndCleanInput(businessData) {
+  // Helper function to clean text
+  function cleanText(text) {
+    if (!text) return '';
+    
+    return text
+      .trim()
+      .replace(/\s+/g, ' ') // Replace multiple spaces with single space
+      .replace(/prooceed|poroceed/gi, 'proceed')
+      .replace(/frorm/gi, 'from')
+      .replace(/missioono/gi, 'mission')
+      .replace(/comobine/gi, 'combine')
+      .replace(/theirr/gi, 'their')
+      .replace(/caan/gi, 'can')
+      .replace(/lgoo/gi, 'logo')
+      .replace(/entreprenuers/gi, 'entrepreneurs')
+      .replace(/ownerrs/gi, 'owners')
+      .replace(/prooducts/gi, 'products')
+      .replace(/whaat/gi, 'what')
+      .replace(/maakes/gi, 'makes')
+      .replace(/ifnromation/gi, 'information')
+      .replace(/displaayaed/gi, 'displayed')
+      .replace(/taaken/gi, 'taken')
+      .replace(/wwith/gi, 'with')
+      .replace(/thaat/gi, 'that')
+      .replace(/aaddition/gi, 'addition')
+      .replace(/arae/gi, 'are')
+      .replace(/\bi\b/g, 'I')
+      .replace(/\bai\b/gi, 'AI')
+      .replace(/\bsaas\b/gi, 'SaaS')
+      .replace(/([.!?])\s*(\w)/g, (_, p1, p2) => `${p1} ${p2.toUpperCase()}`) // Capitalize after periods
+      .replace(/\b(notion|canva)\b/gi, (match) => match.charAt(0).toUpperCase() + match.slice(1).toLowerCase()); // Capitalize product names
+  }
+  
+  // Fix grammar in business mission
+  function fixGrammar(text) {
+    if (!text) return '';
+    
+    return text
+      // Fix common grammar issues
+      .replace(/\s+([,.!?;:])/g, '$1') // Remove space before punctuation
+      .replace(/([,.!?;:])(?=[a-zA-Z])/g, '$1 ') // Add space after punctuation
+      .replace(/\s+/g, ' ') // Normalize spaces
+      .replace(/\bi\s/g, 'I ') // Capitalize standalone I
+      .replace(/\ba\s+([aeiou])/gi, 'an $1') // Fix a/an usage
+      .replace(/(?:^|[.!?]\s+)([a-z])/g, match => match.toUpperCase()) // Capitalize sentences
+      .trim();
+  }
+  
+  // Create a cleaned version of the business data
+  const cleanedData = {};
+  
+  // Clean each field
+  cleanedData.name = cleanText(businessData.name);
+  cleanedData.type = cleanText(businessData.type);
+  cleanedData.mission = fixGrammar(cleanText(businessData.mission));
+  cleanedData.audience = cleanText(businessData.audience);
+  cleanedData.offerings = fixGrammar(cleanText(businessData.offerings));
+  cleanedData.uniqueSelling = fixGrammar(cleanText(businessData.uniqueSelling));
+  cleanedData.colorScheme = cleanText(businessData.colorScheme);
+  cleanedData.brandStyle = cleanText(businessData.brandStyle);
+  
+  return cleanedData;
+}
+
+// Create the confirmation modal with the cleaned input
+function showInputConfirmation(originalData, cleanedData) {
+  // Create modal container if it doesn't exist
+  let modal = document.getElementById('confirmationModal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'confirmationModal';
+    modal.className = 'modal';
+    document.body.appendChild(modal);
+  }
+  
+  // Populate the modal with comparison content
+  modal.innerHTML = `
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Confirm Your Information</h2>
+        <p>We've cleaned up your input for better results. Please review the changes and confirm.</p>
+      </div>
+      <div class="modal-body">
+        <div class="comparison-table">
+          <div class="comparison-row header">
+            <div class="field-name">Field</div>
+            <div class="original-value">Your Input</div>
+            <div class="cleaned-value">Cleaned Version</div>
+          </div>
+          <div class="comparison-row">
+            <div class="field-name">Brand Name</div>
+            <div class="original-value">${originalData.name}</div>
+            <div class="cleaned-value">${cleanedData.name}</div>
+          </div>
+          <div class="comparison-row">
+            <div class="field-name">Business Type</div>
+            <div class="original-value">${originalData.type}</div>
+            <div class="cleaned-value">${cleanedData.type}</div>
+          </div>
+          <div class="comparison-row">
+            <div class="field-name">Mission/Goals</div>
+            <div class="original-value">${originalData.mission}</div>
+            <div class="cleaned-value">${cleanedData.mission}</div>
+          </div>
+          <div class="comparison-row">
+            <div class="field-name">Target Audience</div>
+            <div class="original-value">${originalData.audience}</div>
+            <div class="cleaned-value">${cleanedData.audience}</div>
+          </div>
+          <div class="comparison-row">
+            <div class="field-name">Products/Services</div>
+            <div class="original-value">${originalData.offerings}</div>
+            <div class="cleaned-value">${cleanedData.offerings}</div>
+          </div>
+          <div class="comparison-row">
+            <div class="field-name">Unique Selling Points</div>
+            <div class="original-value">${originalData.uniqueSelling}</div>
+            <div class="cleaned-value">${cleanedData.uniqueSelling}</div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="editAgainBtn" class="btn-secondary">Edit Again</button>
+        <button id="confirmBtn" class="btn-cta">Proceed with Cleaned Version</button>
+      </div>
+    </div>
+  `;
+  
+  // Add styles for the modal
+  const modalStyles = document.createElement('style');
+  modalStyles.textContent = `
+    .modal {
+      display: block;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      overflow: auto;
+    }
+    
+    .modal-content {
+      background-color: #232323;
+      margin: 5% auto;
+      padding: 20px;
+      border-radius: 10px;
+      width: 80%;
+      max-width: 900px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      color: #f8f9fa;
+    }
+    
+    .modal-header {
+      padding-bottom: 15px;
+      border-bottom: 1px solid #444;
+    }
+    
+    .modal-header h2 {
+      color: #00b4d8;
+      margin-bottom: 10px;
+    }
+    
+    .modal-body {
+      padding: 20px 0;
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+    
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    .comparison-row {
+      display: grid;
+      grid-template-columns: 1fr 2fr 2fr;
+      padding: 10px 0;
+      border-bottom: 1px solid #444;
+    }
+    
+    .comparison-row.header {
+      font-weight: bold;
+      background-color: #333;
+      padding: 15px 0;
+      border-radius: 5px 5px 0 0;
+    }
+    
+    .field-name {
+      padding: 0 10px;
+      font-weight: bold;
+      color: #00b4d8;
+    }
+    
+    .original-value {
+      padding: 0 10px;
+      color: #aaa;
+      max-height: 150px;
+      overflow-y: auto;
+    }
+    
+    .cleaned-value {
+      padding: 0 10px;
+      color: #fff;
+      background-color: #2c3e50;
+      border-radius: 4px;
+      max-height: 150px;
+      overflow-y: auto;
+    }
+    
+    .modal-footer {
+      padding-top: 20px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 15px;
+    }
+    
+    .btn-secondary {
+      padding: 10px 20px;
+      background-color: #6c757d;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+    .btn-secondary:hover {
+      background-color: #5a6268;
+    }
+  `;
+  document.head.appendChild(modalStyles);
+  
+  // Show the modal
+  modal.style.display = 'block';
+  
+  // Add event listeners
+  document.getElementById('editAgainBtn').addEventListener('click', function() {
+    modal.style.display = 'none';
+  });
+  
+  document.getElementById('confirmBtn').addEventListener('click', function() {
+    modal.style.display = 'none';
+    // Use the cleaned data to generate results
+    generateResults(cleanedData);
+  });
+}
+
+// Modify the submission process to include validation
+function submitBusinessForm() {
+  // Get all the business data from the form
+  const businessData = {
+    name: document.getElementById('brandName').value,
+    type: document.getElementById('businessType').value,
+    mission: document.getElementById('missionStatement').value,
+    audience: document.getElementById('targetAudience').value,
+    offerings: document.getElementById('productsServices').value,
+    uniqueSelling: document.getElementById('uniqueSelling').value,
+    colorScheme: document.getElementById('colorScheme').value,
+    brandStyle: document.getElementById('brandStyle').value
+  };
+  
+  // Save original data and create cleaned version
+  const cleanedData = validateAndCleanInput(businessData);
+  
+  // Show confirmation modal with both versions
+  showInputConfirmation(businessData, cleanedData);
+}
+
+// This function will be called after user confirms the cleaned data
+function generateResults(businessData) {
+  // Show loading indicator
+  const loadingIndicator = document.createElement('div');
+  loadingIndicator.id = 'loadingIndicator';
+  loadingIndicator.innerHTML = `
+    <div class="loading-spinner"></div>
+    <p>Generating your business starter kit...</p>
+  `;
+  document.getElementById('resultsContainer').appendChild(loadingIndicator);
+  
+  // Generate logo
+  generatePlaceholderLogo(businessData);
+  
+  // Make API call to generate content
+  fetch('/api/generate-business-kit', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      brandName: businessData.name,
+      businessType: businessData.type,
+      missionStatement: businessData.mission,
+      targetAudience: businessData.audience,
+      productsServices: businessData.offerings,
+      uniqueSelling: businessData.uniqueSelling,
+      colorScheme: businessData.colorScheme,
+      brandStyle: businessData.brandStyle
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    // Remove loading indicator
+    document.getElementById('loadingIndicator').remove();
+    
+    if (data.success) {
+      // Format and display AI-generated content
+      document.getElementById('missionResult').innerHTML = formatMissionStatement({
+        missionStatement: data.data.missionStatement
+      });
+      document.getElementById('aboutUsResult').innerHTML = formatAboutUs({
+        aboutUs: data.data.aboutUs
+      });
+      document.getElementById('instagramIdeasResult').innerHTML = formatInstagramIdeas({
+        instagramIdeas: data.data.instagramIdeas
+      });
+      
+      // Generate website code template
+      document.getElementById('websiteCodeResult').querySelector('code').textContent = generatePlaceholderWebsiteCode(businessData);
+    } else {
+      throw new Error('Failed to generate content');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    // Remove loading indicator
+    if (document.getElementById('loadingIndicator')) {
+      document.getElementById('loadingIndicator').remove();
+    }
+    
+    // Show error message
+    const errorMsg = document.createElement('div');
+    errorMsg.className = 'error-message';
+    errorMsg.textContent = 'Failed to generate content. Please try again.';
+    document.getElementById('resultsContainer').appendChild(errorMsg);
+    
+    // Show fallback content
+    document.getElementById('missionResult').innerHTML = generatePlaceholderMission(businessData);
+    document.getElementById('aboutUsResult').innerHTML = generatePlaceholderAboutUs(businessData);
+    document.getElementById('instagramIdeasResult').innerHTML = generatePlaceholderInstagramIdeas(businessData);
+    document.getElementById('websiteCodeResult').querySelector('code').textContent = generatePlaceholderWebsiteCode(businessData);
+  });
+  
+  // Show results section
+  document.querySelector('.results-section').style.display = 'block';
+  document.getElementById('resultsContainer').scrollIntoView({ behavior: 'smooth' });
+}
+
+// Add loading spinner styles
+const spinnerStyles = document.createElement('style');
+spinnerStyles.textContent = `
+  #loadingIndicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    background-color: #2c3e50;
+    border-radius: 10px;
+    margin: 20px 0;
+  }
+  
+  .loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(0, 180, 216, 0.2);
+    border-top: 5px solid #00b4d8;
+    border-radius: 50%;
+    animation: spin 1.5s linear infinite;
+    margin-bottom: 15px;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  .error-message {
+    background-color: rgba(220, 53, 69, 0.2);
+    color: #dc3545;
+    padding: 15px;
+    border-radius: 5px;
+    margin: 20px 0;
+    text-align: center;
+  }
+`;
+document.head.appendChild(spinnerStyles);
+
+// Update event listeners for the final step button
+document.addEventListener('DOMContentLoaded', function() {
+  // Set up existing event listeners
+  
+  // Replace form submission logic to use validation
+  const finalStepButton = document.querySelector('.generate-btn');
+  if (finalStepButton) {
+    finalStepButton.addEventListener('click', function(e) {
+      e.preventDefault();
+      submitBusinessForm();
+    });
+  }
+});
