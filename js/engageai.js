@@ -209,7 +209,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const loadingSpinner = document.getElementById('loadingSpinner');
     const resultsContent = document.getElementById('resultsContent');
     
-    generateBtn.addEventListener('click', function() {
+    generateBtn.addEventListener('click', async function() {
       // Validate final step
       if (!validateStep(5)) return;
       
@@ -239,16 +239,35 @@ document.addEventListener('DOMContentLoaded', function() {
       // Scroll to results section
       resultsSection.scrollIntoView({ behavior: 'smooth' });
       
-      // In a real implementation, this would call your backend API
-      // For now, we'll simulate with a timeout
-      setTimeout(() => {
-        // Generate placeholder results
-        generatePlaceholderResults(businessData);
+      try {
+        // Call the API to generate the business kit
+        const response = await fetch('/api/generate-business-kit', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(businessData)
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to generate business kit');
+        }
+        
+        const data = await response.json();
+        
+        // Display the results
+        document.getElementById('missionResult').innerHTML = data.missionStatement;
+        document.getElementById('aboutUsResult').innerHTML = data.aboutUs;
+        document.getElementById('instagramIdeasResult').innerHTML = data.instagramPosts;
         
         // Hide loading spinner and show results
         loadingSpinner.style.display = 'none';
         resultsContent.style.display = 'block';
-      }, 3000);
+      } catch (error) {
+        console.error('Error generating business kit:', error);
+        alert('Failed to generate business kit. Please try again.');
+        loadingSpinner.style.display = 'none';
+      }
     });
   }
   
@@ -746,27 +765,45 @@ document.head.appendChild(styleSheet);
   
   // Initialize download buttons
   function initDownloadButtons() {
-    // Logo download button
     const downloadLogoBtn = document.getElementById('downloadLogoBtn');
     if (downloadLogoBtn) {
       downloadLogoBtn.addEventListener('click', function() {
-        // Get the SVG content
-        const svgContent = document.getElementById('logoContainer').innerHTML;
+        const logoContainer = document.getElementById('logoContainer');
+        let blob;
+        let filename;
         
-        // Create a Blob from the SVG
-        const blob = new Blob([svgContent], { type: 'image/svg+xml' });
-        const url = URL.createObjectURL(blob);
-        
-        // Create a link and trigger download
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'logo.svg';
-        document.body.appendChild(a);
-        a.click();
-        
-        // Clean up
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
+        // Check if we have a PNG or SVG
+        const img = logoContainer.querySelector('img');
+        if (img) {
+          // For PNG (DALL-E generated)
+          const canvas = document.createElement('canvas');
+          canvas.width = img.naturalWidth;
+          canvas.height = img.naturalHeight;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0);
+          canvas.toBlob((b) => {
+            const url = URL.createObjectURL(b);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'logo.png';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+          }, 'image/png');
+        } else {
+          // For SVG fallback
+          const svgContent = logoContainer.innerHTML;
+          const blob = new Blob([svgContent], { type: 'image/svg+xml' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'logo.svg';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }
       });
     }
     
@@ -1116,25 +1153,13 @@ function generateResults(businessData) {
   `;
   document.getElementById('resultsContainer').appendChild(loadingIndicator);
   
-  // Generate logo
-  generatePlaceholderLogo(businessData);
-  
   // Make API call to generate content
   fetch('/api/generate-business-kit', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({
-      brandName: businessData.name,
-      businessType: businessData.type,
-      missionStatement: businessData.mission,
-      targetAudience: businessData.audience,
-      productsServices: businessData.offerings,
-      uniqueSelling: businessData.uniqueSelling,
-      colorScheme: businessData.colorScheme,
-      brandStyle: businessData.brandStyle
-    })
+    body: JSON.stringify(businessData)
   })
   .then(response => response.json())
   .then(data => {
@@ -1142,7 +1167,10 @@ function generateResults(businessData) {
     document.getElementById('loadingIndicator').remove();
     
     if (data.success) {
-      // Format and display AI-generated content
+      // Display the logo
+      displayLogo(data.data.logo);
+      
+      // Format and display other AI-generated content
       document.getElementById('missionResult').innerHTML = formatMissionStatement({
         missionStatement: data.data.missionStatement
       });
@@ -1161,27 +1189,14 @@ function generateResults(businessData) {
   })
   .catch(error => {
     console.error('Error:', error);
-    // Remove loading indicator
-    if (document.getElementById('loadingIndicator')) {
-      document.getElementById('loadingIndicator').remove();
-    }
-    
     // Show error message
-    const errorMsg = document.createElement('div');
-    errorMsg.className = 'error-message';
-    errorMsg.textContent = 'Failed to generate content. Please try again.';
-    document.getElementById('resultsContainer').appendChild(errorMsg);
-    
-    // Show fallback content
-    document.getElementById('missionResult').innerHTML = generatePlaceholderMission(businessData);
-    document.getElementById('aboutUsResult').innerHTML = generatePlaceholderAboutUs(businessData);
-    document.getElementById('instagramIdeasResult').innerHTML = generatePlaceholderInstagramIdeas(businessData);
-    document.getElementById('websiteCodeResult').querySelector('code').textContent = generatePlaceholderWebsiteCode(businessData);
+    document.getElementById('resultsContent').innerHTML = `
+      <div class="error-message">
+        <h3>Error Generating Content</h3>
+        <p>There was an error generating your business kit. Please try again.</p>
+      </div>
+    `;
   });
-  
-  // Show results section
-  document.querySelector('.results-section').style.display = 'block';
-  document.getElementById('resultsContainer').scrollIntoView({ behavior: 'smooth' });
 }
 
 // Add loading spinner styles
@@ -1237,3 +1252,25 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 });
+
+// Display logo in results
+function displayLogo(logoData) {
+  const logoContainer = document.getElementById('logoContainer');
+  
+  if (logoData.success && logoData.imageData) {
+    // Display DALL-E generated image
+    const img = document.createElement('img');
+    img.src = `data:image/png;base64,${logoData.imageData}`;
+    img.alt = 'Generated Logo';
+    img.style.maxWidth = '100%';
+    img.style.maxHeight = '300px';
+    logoContainer.innerHTML = '';
+    logoContainer.appendChild(img);
+  } else if (logoData.fallback && logoData.svg) {
+    // Display fallback SVG
+    logoContainer.innerHTML = logoData.svg;
+  } else {
+    // Display error message
+    logoContainer.innerHTML = '<p class="error">Failed to generate logo. Please try again.</p>';
+  }
+}
